@@ -1,0 +1,16 @@
+# @package _global_
+defaults:
+  - /data: sn_explosion_hr
+  - /model: unet_convnext
+  - /lr_scheduler: cosine_with_warmup
+
+trainer:
+  loss_fn:
+    _target_: the_well.benchmark.metrics.MSE
+  formatter: channels_first_default
+  epochs: 100
+  val_frequency: 1
+  rollout_val_frequency: 0
+  checkpoint_frequency: 10
+
+name: finetune_sn
