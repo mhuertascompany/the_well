@@ -4,6 +4,11 @@ defaults:
   - /model: fno
   - /lr_scheduler: cosine_with_warmup
 
+# Override global defaults from config.yaml (which sets n_steps_input: 4)
+data:
+  n_steps_input: 1
+  n_steps_output: 1
+
 trainer:
   loss_fn:
     _target_: the_well.benchmark.metrics.MSE
