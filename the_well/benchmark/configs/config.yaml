@@ -5,8 +5,8 @@ defaults:
   - server: ???
   - resume_overrides: no_overrides
 data:
-  n_steps_input: 4
-  n_steps_output: 1
+#  n_steps_input: 4
+#  n_steps_output: 1
   normalization_type:
     _partial_: true
     _target_: the_well.data.normalization.ZScoreNormalization

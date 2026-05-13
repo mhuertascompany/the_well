@@ -29,10 +29,10 @@ from the_well.data.normalization import ZScoreNormalization
 
 # ── Model registry (must match prepare_checkpoints.py) ───────────────────────
 MODEL_REGISTRY = {
-    "finetune_fno.pt":           FNO,
-    "finetune_tfno.pt":          TFNO,
-    "finetune_unet_classic.pt":  UNetClassic,
-    "finetune_unet_convnext.pt": UNetConvNext,
+    "sn_explosion_hr-finetune_sn-FNO-5e-05":           FNO,
+    "sn_explosion_hr-finetune_sn-TFNO-5e-05":          TFNO,
+    "sn_explosion_hr-finetune_sn-UNetClassic-5e-05":  UNetClassic,
+    "sn_explosion_hr-finetune_sn-UNetConvNext-5e-05": UNetConvNext,
 }
 
 BUILD_KWARGS = {
@@ -128,7 +128,7 @@ def run(checkpoint_dir: str, dataset_base: str, batch_size: int) -> None:
     results = []
 
     for fname, model_cls in MODEL_REGISTRY.items():
-        ckpt_path = os.path.join(checkpoint_dir, fname)
+        ckpt_path = os.path.join(checkpoint_dir, fname, '0/checkpoints/best.pt')
         if not os.path.isfile(ckpt_path):
             print(f"  Skipping {fname} — checkpoint not found at {ckpt_path}")
             continue
@@ -139,7 +139,7 @@ def run(checkpoint_dir: str, dataset_base: str, batch_size: int) -> None:
         model.load_state_dict(ckpt["model_state_dict"])
 
         metrics = evaluate_model(model, loader, device)
-        model_name = fname.replace("finetune_", "").replace(".pt", "")
+        model_name = fname.replace("sn_explosion_hr-finetune_sn-", "").replace("-5e-05", "")
 
         row = {"model": model_name}
         for field_idx, field in enumerate(FIELD_NAMES):

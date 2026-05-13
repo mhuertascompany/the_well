@@ -1,0 +1,18 @@
+mean:
+  density: -5.7372E+01
+  energy: 2.7796E+01
+mean_delta:
+  density: -2.9853E-02
+  energy: 6.3332E-02
+rms:
+  density: 5.7417E+01
+  energy: 2.7868E+01
+rms_delta:
+  density: 7.8621E-01
+  energy: 9.3111E-01
+std:
+  density: 2.2701E+00
+  energy: 2.0042E+00
+std_delta:
+  density: 7.8564E-01
+  energy: 9.2895E-01

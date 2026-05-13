@@ -2,5 +2,5 @@
 # Noctua HPC cluster configuration
 # Adjust well_base_path to wherever the datasets are stored on the cluster.
 data:
-  well_base_path: "__PLACEHOLDER__/datasets/"   # absolute path on Noctua
-experiment_dir: "__PLACEHOLDER__/experiments/"  # absolute path for outputs
+  well_base_path: "/ltstorage/astro/abichot/THEWELL/the_well/datasets/"   # absolute path on Noctua
+experiment_dir: "/ltstorage/astro/abichot/THEWELL/the_well/the_well/benchmark/experiments/"  # absolute path for outputs

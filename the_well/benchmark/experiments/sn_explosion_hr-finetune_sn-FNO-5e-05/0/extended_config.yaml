@@ -1,0 +1,51 @@
+trainer:
+  _target_: the_well.benchmark.trainer.Trainer
+  epochs: 15
+  val_frequency: 1
+  rollout_val_frequency: 0
+  short_validation_length: 20
+  max_rollout_steps: 100
+  num_time_intervals: 5
+  make_rollout_videos: false
+  checkpoint_frequency: 10
+  loss_fn:
+    _target_: the_well.benchmark.metrics.MSE
+  checkpoint_path: ''
+  formatter: channels_first_default
+optimizer:
+  _target_: torch.optim.AdamW
+  lr: 5.0e-05
+  weight_decay: 0.0001
+data:
+  _target_: the_well.data.WellDataModule
+  well_base_path: /ltstorage/astro/abichot/THEWELL/the_well/datasets/
+  well_dataset_name: sn_explosion_hr
+  batch_size: 4
+  use_normalization: true
+  normalization_type:
+    _partial_: true
+    _target_: the_well.data.normalization.ZScoreNormalization
+  n_steps_input: 1
+  n_steps_output: 1
+  min_dt_stride: 1
+  max_dt_stride: 1
+  train_dataset:
+    _partial_: true
+    _target_: the_well.data.datasets.WellDataset
+model:
+  _target_: the_well.benchmark.models.FNO
+  modes1: 16
+  modes2: 16
+  hidden_channels: 128
+lr_scheduler:
+  _target_: the_well.benchmark.optim.schedulers.LinearWarmupCosineAnnealingLR
+  warmup_epochs: 5
+name: finetune_sn
+experiment_dir: /ltstorage/astro/abichot/THEWELL/the_well/the_well/benchmark/experiments/
+auto_resume: true
+folder_override: ''
+checkpoint_override: ''
+config_override: ''
+validation_mode: false
+data_workers: 14
+wandb_project_name: the_well_extended_again

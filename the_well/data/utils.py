@@ -23,6 +23,7 @@ WELL_DATASETS = [
     "shear_flow",
     "supernova_explosion_64",
     "supernova_explosion_128",
+    "sn_explosion_hr",
     "turbulence_gravity_cooling",
     "turbulent_radiative_layer_2D",
     "turbulent_radiative_layer_3D",

@@ -13,14 +13,18 @@
 # =============================================================================
 set -euo pipefail
 
+source $(conda info --base)/etc/profile.d/conda.sh
+conda activate /ltstorage/astro/abichot/envs/thewell_py311
+
+
 # ── CONFIGURATION — fill in before running ────────────────────────────────────
-SIM_DIR="__PLACEHOLDER__/simulations"   # directory containing raw .h5 sim files
+SIM_DIR="/ltstorage/astro/abichot/3D_grid/high_res/h1b4_SN_500"   # directory containing raw .h5 sim files
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 DATASET_BASE="${REPO_ROOT}/datasets/sn_explosion_hr"
 CHECKPOINT_DIR="${REPO_ROOT}/checkpoints"
 LR="5e-5"                               # fine-tuning learning rate
-EPOCHS=100                              # override trainer epochs if needed
-SERVER="local"                          # "local" or "noctua" (see configs/server/)
+EPOCHS=15                              # override trainer epochs if needed
+SERVER="noctua"                          # "local" or "noctua" (see configs/server/)
 # ─────────────────────────────────────────────────────────────────────────────
 
 echo "================================================================"
@@ -32,28 +36,28 @@ echo " Checkpoints: ${CHECKPOINT_DIR}"
 echo "================================================================"
 
 # ── Step 1: Convert data ──────────────────────────────────────────────────────
-echo ""
-echo "[1/4] Converting simulation files to Well HDF5 format..."
-python "${REPO_ROOT}/noctua/convert_data.py" \
-    --input_dir   "${SIM_DIR}" \
-    --output_dir  "${DATASET_BASE}/data" \
-    --train_frac  0.8 \
-    --val_frac    0.1 \
-    --trajs_per_file 4 \
-    --seed 42
+#echo ""
+#echo "[1/4] Converting simulation files to Well HDF5 format..."
+#python "${REPO_ROOT}/noctua/convert_data.py" \
+#    --input_dir   "${SIM_DIR}" \
+#    --output_dir  "${DATASET_BASE}/data" \
+#    --train_frac  0.8 \
+#    --val_frac    0.1 \
+#    --trajs_per_file 4 \
+#    --seed 42
 
 # ── Step 2: Compute statistics ────────────────────────────────────────────────
-echo ""
-echo "[2/4] Computing normalization statistics..."
-python "${REPO_ROOT}/noctua/compute_stats.py" \
-    --base_path "${DATASET_BASE}"
+#echo ""
+#echo "[2/4] Computing normalization statistics..."
+#python "${REPO_ROOT}/noctua/compute_stats.py" \
+#    --base_path "${DATASET_BASE}"
 
 # ── Step 3: Prepare checkpoints ───────────────────────────────────────────────
-echo ""
-echo "[3/4] Preparing pretrained checkpoints..."
-python "${REPO_ROOT}/noctua/prepare_checkpoints.py" \
-    --output_dir "${CHECKPOINT_DIR}" \
-    --models fno tfno unet_classic unet_convnext
+#echo ""
+#echo "[3/4] Preparing pretrained checkpoints..."
+#python "${REPO_ROOT}/noctua/prepare_checkpoints.py" \
+#    --output_dir "${CHECKPOINT_DIR}" \
+#    --models fno tfno unet_classic unet_convnext
 
 # ── Step 4: Fine-tune each model ──────────────────────────────────────────────
 echo ""
@@ -69,15 +73,15 @@ MODELS=(
 
 for entry in "${MODELS[@]}"; do
     EXPERIMENT="${entry%%:*}"
-    CHECKPOINT="${entry##*:}"
+#    CHECKPOINT="${entry##*:}"
     echo ""
     echo "  Training: experiment=${EXPERIMENT}"
     python train.py \
         experiment="${EXPERIMENT}" \
         server="${SERVER}" \
         "optimizer.lr=${LR}" \
-        "trainer.epochs=${EPOCHS}" \
-        "checkpoint_override=${CHECKPOINT}"
+        "trainer.epochs=${EPOCHS}"
+#        "checkpoint_override=${CHECKPOINT}"
 done
 
 echo ""

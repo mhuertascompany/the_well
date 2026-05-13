@@ -108,10 +108,11 @@ def transfer_weights(pretrained: torch.nn.Module, new_model: torch.nn.Module) ->
 
 def make_trainer_checkpoint(model: torch.nn.Module, path: str) -> None:
     """Save in the format expected by Trainer.load_checkpoint()."""
+    optimizer = torch.optim.Adam(model.parameters())
     torch.save({
         "epoch": 0,
         "model_state_dict": model.state_dict(),
-        "optimizer_state_dit": {},           # empty — optimizer reinits from scratch
+        "optimizer_state_dict": optimizer.state_dict(),           # empty — optimizer reinits from scratch
         "validation_loss": float("inf"),
         "best_validation_loss": float("inf"),
     }, path)

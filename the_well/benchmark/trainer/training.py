@@ -156,7 +156,7 @@ class Trainer:
             {
                 "epoch": epoch,
                 "model_state_dict": self.model.state_dict(),
-                "optimizer_state_dit": self.optimizer.state_dict(),
+                "optimizer_state_dict": self.optimizer.state_dict(),
                 "validation_loss": validation_loss,
                 "best_validation_loss": self.best_val_loss,
             },
@@ -170,7 +170,7 @@ class Trainer:
         if self.model is not None:
             self.model.load_state_dict(checkpoint["model_state_dict"])
         if self.optimizer is not None:
-            self.optimizer.load_state_dict(checkpoint["optimizer_state_dit"])
+            self.optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
         self.best_val_loss = checkpoint["best_validation_loss"]
         self.starting_val_loss = checkpoint["validation_loss"]
         self.starting_epoch = (
@@ -484,7 +484,7 @@ class Trainer:
                     )
                     self.best_val_loss = val_loss
             # Check if time for expensive validation - periodic or final
-            if epoch % self.rollout_val_frequency == 0 or (epoch == self.max_epoch):
+            if (self.rollout_val_frequency > 0 and (epoch % self.rollout_val_frequency == 0 or epoch == self.max_epoch)):
                 logger.info(
                     f"Epoch {epoch}/{self.max_epoch}: starting rollout validation"
                 )
